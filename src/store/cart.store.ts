@@ -2,13 +2,17 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Product } from "@/types/product.types";
 
-type CartItem = Product & {
+export type CartItem = Product & {
   quantity: number;
 };
 
 type CartStore = {
   items: CartItem[];
   addToCart: (product: Product) => void;
+  increaseQuantity: (productId: number) => void;
+  decreaseQuantity: (productId: number) => void;
+  removeFromCart: (productId: number) => void;
+  clearCart: () => void;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -36,9 +40,30 @@ export const useCartStore = create<CartStore>()(
             items: [...state.items, { ...product, quantity: 1 }],
           };
         }),
+      increaseQuantity: (productId) =>
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.product_id === productId ? { ...item, quantity: item.quantity + 1 } : item
+          ),
+        })),
+      decreaseQuantity: (productId) =>
+        set((state) => ({
+          items: state.items
+            .map((item) =>
+              item.product_id === productId
+                ? { ...item, quantity: Math.max(0, item.quantity - 1) }
+                : item
+            )
+            .filter((item) => item.quantity > 0),
+        })),
+      removeFromCart: (productId) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.product_id !== productId),
+        })),
+      clearCart: () => set({ items: [] }),
     }),
     {
-      name: "cart-storage", // localStorage key
+      name: "cart-storage",
       storage: createJSONStorage(() => localStorage),
     }
   )

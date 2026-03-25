@@ -1,10 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/services/product.service";
+import { ProductListResult, ProductQuery } from "@/types/product.types";
+import { getProductsClient } from "@/services/product.service";
 
-export const useProducts = () => {
+type UseProductsOptions = {
+  query: ProductQuery;
+  initialData?: ProductListResult;
+};
+
+export const useProducts = ({ query, initialData }: UseProductsOptions) => {
   return useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    queryKey: ["products", query.page, query.limit, query.category ?? "", query.search ?? ""],
+    queryFn: () => getProductsClient(query),
+    initialData,
+    staleTime: 1000 * 60 * 1,
   });
 };

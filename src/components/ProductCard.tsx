@@ -3,6 +3,7 @@
 import { Product } from "@/types/product.types";
 import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -35,7 +36,11 @@ export const ProductCard = ({ product }: Props) => {
         />
       </div>
       <CardHeader>
-        <CardTitle>{product.name}</CardTitle>
+        <CardTitle>
+          <Link href={`/products/${product.product_id}`} className="hover:underline">
+            {product.name}
+          </Link>
+        </CardTitle>
         <CardDescription>{product.brand}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -54,9 +59,16 @@ export const ProductCard = ({ product }: Props) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={() => addToCart(product)} className="w-full">
-          Add to Cart
-        </Button>
+        <div className="flex w-full gap-2">
+          <Link href={`/products/${product.product_id}`} className="w-1/2">
+            <Button variant="outline" className="w-full">
+              Details
+            </Button>
+          </Link>
+          <Button onClick={() => addToCart(product)} className="w-1/2">
+            Add To Cart
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

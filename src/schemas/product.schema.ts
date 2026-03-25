@@ -18,7 +18,7 @@ export const productSchema = z.object({
   brand: z.string(),
   category: z.string(),
   rating: z.number(),
-  reviews: z.array(reviewSchema),
+  reviews: z.array(reviewSchema).optional().default([]),
 });
 
 export const productsSchema = z.array(productSchema);

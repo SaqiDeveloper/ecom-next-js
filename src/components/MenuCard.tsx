@@ -1,5 +1,4 @@
-"use client";
-
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -7,10 +6,10 @@ type Props = {
   title: string;
   description: string;
   buttonLabel: string;
-  onClick: () => void;
+  href: string;
 };
 
-export const MenuCard = ({ title, description, buttonLabel, onClick }: Props) => {
+export const MenuCard = ({ title, description, buttonLabel, href }: Props) => {
   return (
     <Card className="transition hover:shadow-md">
       <CardHeader>
@@ -20,9 +19,9 @@ export const MenuCard = ({ title, description, buttonLabel, onClick }: Props) =>
         <p className="text-sm text-slate-600">{description}</p>
       </CardContent>
       <CardFooter>
-        <Button onClick={onClick} className="w-full">
-          {buttonLabel}
-        </Button>
+        <Link href={href} className="w-full">
+          <Button className="w-full">{buttonLabel}</Button>
+        </Link>
       </CardFooter>
     </Card>
   );
